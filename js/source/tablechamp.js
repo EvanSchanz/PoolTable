@@ -2,12 +2,12 @@
     'use strict'
     var auth,
         defaultColors = {
-            'c0' : '#FFF',
-            'c1' : '#D8D8D8',
-            'c2' : '#60678B',
-            'c3' : '#283350',
-            'c4' : '#1C2242',
-            'c5' : '#57D3C3'
+            'c0': '#FFF',
+            'c1': '#D8D8D8',
+            'c2': '#60678B',
+            'c3': '#283350',
+            'c4': '#1C2242',
+            'c5': '#57D3C3'
         },
         fbdb,
         isOnline = true,
@@ -20,19 +20,19 @@
     lastGame.game = [];
     // localData Object
     var localData = {};
-        localData.settings = {};
-        localData.settings.appColors = {
-            'c0' : defaultColors.c0,
-            'c1' : defaultColors.c1,
-            'c2' : defaultColors.c2,
-            'c3' : defaultColors.c3,
-            'c4' : defaultColors.c4,
-            'c5' : defaultColors.c5
-        };
+    localData.settings = {};
+    localData.settings.appColors = {
+        'c0': defaultColors.c0,
+        'c1': defaultColors.c1,
+        'c2': defaultColors.c2,
+        'c3': defaultColors.c3,
+        'c4': defaultColors.c4,
+        'c5': defaultColors.c5
+    };
     // ---------------------------------------------------
     // Ready
     // ---------------------------------------------------
-    $(window).load(function(){
+    $(window).load(function () {
         // Load FireBase Settings
         var config = {
             apiKey: cs.apiKey,
@@ -46,7 +46,7 @@
     });
     function init() {
         // Make sure they're logged in
-        auth.onAuthStateChanged(function(user) {
+        auth.onAuthStateChanged(function (user) {
             if (!user) {
                 window.location = "./index.html";
             }
@@ -61,20 +61,20 @@
     }
     function initHeader() {
         $('.app header').html(tmpl('appHeader', {
-            "addScore" : i18n.app.appHeader.addScore,
-            "doubles" : i18n.app.appHeader.doubles,
-            "logOut" : i18n.app.appHeader.logOut,
-            "settings" : i18n.app.appHeader.settings,
-            "singles" : i18n.app.appHeader.singles
+            "addScore": i18n.app.appHeader.addScore,
+            "doubles": i18n.app.appHeader.doubles,
+            "logOut": i18n.app.appHeader.logOut,
+            "settings": i18n.app.appHeader.settings,
+            "singles": i18n.app.appHeader.singles
         }));
-        $('.app .name').on('click', function() {
+        $('.app .name').on('click', function () {
             sidebarShow();
             return false;
         });
     }
     function initLoader() {
         $('.loader').html(tmpl('loader', {
-            "loading" : i18n.app.loader.loading
+            "loading": i18n.app.loader.loading
         }));
     }
     // ---------------------------------------------------
@@ -82,39 +82,39 @@
     // ---------------------------------------------------
     function initEvents() {
         // Log out
-        $('.logout').on('click', function() {
-            auth.signOut().then(function() {
+        $('.logout').on('click', function () {
+            auth.signOut().then(function () {
                 window.location = "./index.html#logout";
-            }, function(error) {
+            }, function (error) {
                 console.log('Failed to log out');
             });
             return false;
         });
         // Ranking toggle
-        $('.ranking-toggle').on('click', function() {
+        $('.ranking-toggle').on('click', function () {
             var thisView = $(this).data('view');
             rankingToggle(thisView)
             return false;
         });
         // Settings Link
-        $('.settings').on('click', function() {
+        $('.settings').on('click', function () {
             sidebarToggle();
             return false;
         });
         // Add Score
-        $('.add-score').on('click', function() {
+        $('.add-score').on('click', function () {
             // Hide sidebar if it's showing
             $('body').removeClass('show-sidebar');
             // Show stats modal
             modalShow();
             // Populate from JS template
             $('.modal').html(tmpl('scoreAdd', {
-                "addScoreButton" : i18n.app.scoreAdd.addScoreButton,
-                "addScoreTitle" : i18n.app.scoreAdd.addScoreTitle,
-                "teamOnePlayers" : i18n.app.scoreAdd.teamOnePlayers,
-                "teamOneScore" : i18n.app.scoreAdd.teamOneScore,
-                "teamTwoPlayers" : i18n.app.scoreAdd.teamTwoPlayers,
-                "teamTwoScore" : i18n.app.scoreAdd.teamTwoScore
+                "addScoreButton": i18n.app.scoreAdd.addScoreButton,
+                "addScoreTitle": i18n.app.scoreAdd.addScoreTitle,
+                "teamOnePlayers": i18n.app.scoreAdd.teamOnePlayers,
+                "teamOneScore": i18n.app.scoreAdd.teamOneScore,
+                "teamTwoPlayers": i18n.app.scoreAdd.teamTwoPlayers,
+                "teamTwoScore": i18n.app.scoreAdd.teamTwoScore
             }));
             // Update add score player selection
             scoringPopulatePlayerSelection();
@@ -127,14 +127,19 @@
             });
             return false;
         });
+        $('.house-rule').on('click', function () {
+            $('body').removeClass('show-sidebar');
+            modalShow();
+            $('.modal').html(tmpl('houseRules'));
+        });
     }
     // ---------------------------------------------------
     // Offline
     // ---------------------------------------------------
     function initOfflineDetect() {
-        setTimeout(function() {
+        setTimeout(function () {
             var connectedRef = firebase.database().ref(".info/connected");
-            connectedRef.on("value", function(snap) {
+            connectedRef.on("value", function (snap) {
                 if (snap.val() === false) {
                     messageShow('warning', i18n.app.messages.notConnected + '...', true);
                     isOnline = false;
@@ -155,7 +160,7 @@
     // Listeners
     // ---------------------------------------------------
     function initPlayersListener() {
-        fbdb.ref('/players/').on('value', function(snapshot) {
+        fbdb.ref('/players/').on('value', function (snapshot) {
             // Update local data set
             localDataUpdate(snapshot.val());
             // Update doubles rankings
@@ -167,17 +172,17 @@
         });
     }
     function initSettingsListener() {
-        fbdb.ref('/settings/').on('value', function(snapshot) {
+        fbdb.ref('/settings/').on('value', function (snapshot) {
             // Update local data set
             localSettingsUpdate(snapshot.val());
             // Update colors
             $('.css-block').html(tmpl('cssBlock', {
-                'c0' : localData.settings.appColors.c0,
-                'c1' : localData.settings.appColors.c1,
-                'c2' : localData.settings.appColors.c2,
-                'c3' : localData.settings.appColors.c3,
-                'c4' : localData.settings.appColors.c4,
-                'c5' : localData.settings.appColors.c5
+                'c0': localData.settings.appColors.c0,
+                'c1': localData.settings.appColors.c1,
+                'c2': localData.settings.appColors.c2,
+                'c3': localData.settings.appColors.c3,
+                'c4': localData.settings.appColors.c4,
+                'c5': localData.settings.appColors.c5
             }));
             // Update org name
             sidebarBasicSettingsUpdate();
@@ -202,13 +207,13 @@
                     lost, won;
                 if (data.won) {
                     lost = data.gamesLost,
-                    won = parseInt(data.gamesWon, 10) - 1;
+                        won = parseInt(data.gamesWon, 10) - 1;
                     if (won < 0) {
                         won = 0;
                     }
                 } else {
                     lost = parseInt(data.gamesLost, 10) - 1,
-                    won = data.gamesWon;
+                        won = data.gamesWon;
                     if (lost < 0) {
                         lost = 0;
                     }
@@ -249,14 +254,14 @@
             }
         }
         localData.playersArray = localData.playersArray.slice(0);
-        localData.playersArray.sort(function(a,b) {
+        localData.playersArray.sort(function (a, b) {
             var x = a.name.toLowerCase();
             var y = b.name.toLowerCase();
             return x < y ? -1 : x > y ? 1 : 0;
         });
         // Sort by doubles array
         localData.playersByDoubles = localData.playersArray.slice(0);
-        localData.playersByDoubles.sort(function(a,b) {
+        localData.playersByDoubles.sort(function (a, b) {
             return a.doubles_points - b.doubles_points;
         }).reverse();
         // Add doubles rank to array
@@ -268,7 +273,7 @@
         }
         // Sort by singles array
         localData.playersBySingles = localData.playersArray.slice(0);
-        localData.playersBySingles.sort(function(a,b) {
+        localData.playersBySingles.sort(function (a, b) {
             return a.singles_points - b.singles_points;
         }).reverse();
         // Add singles rank to array
@@ -321,12 +326,12 @@
     // Modal
     // ---------------------------------------------------
     function modalEvents() {
-        $('.modal-close, .modal-backdrop').off('click').on('click', function() {
+        $('.modal-close, .modal-backdrop').off('click').on('click', function () {
             modalHide();
             $('.message').removeClass('show');
             return false;
         });
-        $('.modal').off('click').on('click', function(e) {
+        $('.modal').off('click').on('click', function (e) {
             e.stopPropagation();
         });
     }
@@ -373,16 +378,16 @@
     }
     function playerSettingsEvents() {
         // Delete Event
-        $('.player .player-delete').on('click', function() {
+        $('.player .player-delete').on('click', function () {
             var key = $(this).closest('.player').data('id');
             if (confirm('Delete ' + localData.playersByKey[key].name + '?')) {
-                fbdb.ref('/players/' + key).remove().then(function() {
+                fbdb.ref('/players/' + key).remove().then(function () {
                     messageShow('success', i18n.app.messages.playerDeleted, true);
                     playerSettingsUpdate();
                 })
-                .catch(function(error) {
-                    console.log('Failed to delete player');
-                });
+                    .catch(function (error) {
+                        console.log('Failed to delete player');
+                    });
             }
             return false;
         });
@@ -392,17 +397,17 @@
             if (event.keyCode === 13) {
                 fbdb.ref('/players/' + key).update({
                     "name": $(this).val()
-                }, function() {
+                }, function () {
                     messageShow('success', i18n.app.messages.playerUpdated, true);
                     playerSettingsUpdate();
-                }).catch(function(error) {
+                }).catch(function (error) {
                     console.log('Failed to update player');
                 });
             }
             return false;
         });
         // Update Status
-        $('.player .player-status').on('click', function() {
+        $('.player .player-status').on('click', function () {
             var currentStatus = $(this).text();
             var key = $(this).closest('.player').data('id');
             var newStatus = true;
@@ -411,19 +416,19 @@
             }
             fbdb.ref('/players/' + key).update({
                 status: newStatus
-            }, function() {
+            }, function () {
                 messageShow('success', i18n.app.messages.playerStatusUpdated, true);
                 playerSettingsUpdate();
-            }).catch(function(error) {
+            }).catch(function (error) {
                 console.log('Failed to update player status');
             });
             return false;
         });
-        $('.players-add-link').on('click', function() {
+        $('.players-add-link').on('click', function () {
             $('.players-add').slideDown();
             $('.players-add-form textarea').focus()
             $(this).hide();
-            setTimeout(function() {
+            setTimeout(function () {
                 sidebarResetHeight();
             }, 600);
             return false;
@@ -466,7 +471,7 @@
     }
     function rankingsEvents() {
         // Show stats
-        $('.ranking').on('click', function() {
+        $('.ranking').on('click', function () {
             // Hide sidebar if it's showing
             $('body').removeClass('show-sidebar');
             // Player key
@@ -474,47 +479,47 @@
             // Show stats modal
             modalShow();
             $('.modal').html(tmpl('stats', {
-                "forText" : i18n.app.stats.forText,
-                "name" : localData.playersByKey[thisKey].name,
-                "playerStats" : i18n.app.stats.playerStats
+                "forText": i18n.app.stats.forText,
+                "name": localData.playersByKey[thisKey].name,
+                "playerStats": i18n.app.stats.playerStats
             }));
             // Player stats
             var doublesPlayed = localData.playersByKey[thisKey].doubles_lost + localData.playersByKey[thisKey].doubles_won;
             var singlesPlayed = localData.playersByKey[thisKey].singles_lost + localData.playersByKey[thisKey].singles_won;
             $('.stats-player').html(tmpl('statsPlayer', {
-                "doubles" : i18n.app.statsPlayer.doubles,
-                "doubles_lost" : localData.playersByKey[thisKey].doubles_lost,
-                "doubles_played" : doublesPlayed,
-                "doubles_rank" : localData.playersByKey[thisKey].doubles_rank,
-                "doubles_won" : localData.playersByKey[thisKey].doubles_won,
-                "gamesLost" : i18n.app.statsPlayer.gamesLost,
-                "gamesPlayed" : i18n.app.statsPlayer.gamesPlayed,
-                "gamesWon" : i18n.app.statsPlayer.gamesWon,
-                "ranking" : i18n.app.statsPlayer.ranking,
-                "singles" : i18n.app.statsPlayer.singles,
-                "singles_lost" : localData.playersByKey[thisKey].singles_lost,
-                "singles_played" : singlesPlayed,
-                "singles_rank" : localData.playersByKey[thisKey].singles_rank,
-                "singles_won" : localData.playersByKey[thisKey].singles_won
+                "doubles": i18n.app.statsPlayer.doubles,
+                "doubles_lost": localData.playersByKey[thisKey].doubles_lost,
+                "doubles_played": doublesPlayed,
+                "doubles_rank": localData.playersByKey[thisKey].doubles_rank,
+                "doubles_won": localData.playersByKey[thisKey].doubles_won,
+                "gamesLost": i18n.app.statsPlayer.gamesLost,
+                "gamesPlayed": i18n.app.statsPlayer.gamesPlayed,
+                "gamesWon": i18n.app.statsPlayer.gamesWon,
+                "ranking": i18n.app.statsPlayer.ranking,
+                "singles": i18n.app.statsPlayer.singles,
+                "singles_lost": localData.playersByKey[thisKey].singles_lost,
+                "singles_played": singlesPlayed,
+                "singles_rank": localData.playersByKey[thisKey].singles_rank,
+                "singles_won": localData.playersByKey[thisKey].singles_won
             }));
             // Player games stats
             var lastTwentyGames = '';
             var lastTwentyGamesData = [];
             var playersGames = {};
-            fbdb.ref('/playersgame/' + thisKey).limitToLast(20).once('value').then(function(snapshot) {
+            fbdb.ref('/playersgame/' + thisKey).limitToLast(20).once('value').then(function (snapshot) {
                 playersGames = snapshot.val();
                 // To array
                 for (var key in playersGames) {
                     lastTwentyGamesData.unshift({
-                        "dt" : playersGames[key].dt,
-                        "key" : key,
-                        "t1p1" : playersGames[key].t1p1,
-                        "t1p2" : playersGames[key].t1p2 || '',
-                        "t2p1" : playersGames[key].t2p1,
-                        "t2p2" : playersGames[key].t2p2 || '',
-                        "t1_points" : playersGames[key].t1_points,
-                        "t2_points" : playersGames[key].t2_points,
-                        "won" : playersGames[key].won
+                        "dt": playersGames[key].dt,
+                        "key": key,
+                        "t1p1": playersGames[key].t1p1,
+                        "t1p2": playersGames[key].t1p2 || '',
+                        "t2p1": playersGames[key].t2p1,
+                        "t2p2": playersGames[key].t2p2 || '',
+                        "t1_points": playersGames[key].t1_points,
+                        "t2_points": playersGames[key].t2_points,
+                        "won": playersGames[key].won
                     });
                 }
                 // Iterate through array
@@ -546,11 +551,11 @@
                     }
                     // Piece it all together
                     lastTwentyGames += tmpl('statsPlayerGames', {
-                        "status" : gameStatus,
-                        "t1" : t1,
-                        "t1Score" : lastTwentyGamesData[i].t1_points,
-                        "t2" : t2,
-                        "t2Score" : lastTwentyGamesData[i].t2_points
+                        "status": gameStatus,
+                        "t1": t1,
+                        "t1Score": lastTwentyGamesData[i].t1_points,
+                        "t2": t2,
+                        "t2Score": lastTwentyGamesData[i].t2_points
                     });
                 }
                 if (!lastTwentyGames) {
@@ -558,7 +563,7 @@
                 }
                 // Add it to the DOM
                 $('.stats-player-games ul').html(lastTwentyGames);
-            }).catch(function(error) {
+            }).catch(function (error) {
                 console.log('Unable to pull player game history');
                 console.log(error)
             });
@@ -665,8 +670,8 @@
             console.log(t1rp);
             console.log(t2rp);
             if (isDoubles) {
-            console.log(t1rp);
-            console.log(t2rp);
+                console.log(t1rp);
+                console.log(t2rp);
             }
             console.log('----');
         }
@@ -722,7 +727,7 @@
         // Save "games" data
         var newGameKey = fbdb.ref().child('games').push().key;
         var dbGames = fbdb.ref('/games/' + newGameKey);
-        dbGames.set(gameData).catch(function(error) {
+        dbGames.set(gameData).catch(function (error) {
             console.log('Failed to add new game');
         });
         if (logging) {
@@ -732,9 +737,9 @@
         }
         // Reset last movements
         if (isDoubles) {
-            scoringResetLastMovements('doubles_last_movement', {'doubles_last_movement' : ''});
+            scoringResetLastMovements('doubles_last_movement', { 'doubles_last_movement': '' });
         } else {
-            scoringResetLastMovements('singles_last_movement', {'singles_last_movement' : ''});
+            scoringResetLastMovements('singles_last_movement', { 'singles_last_movement': '' });
         }
         if (logging) {
             console.log('Reset last movements');
@@ -780,71 +785,71 @@
             }
             // Cache last game
             lastGame.players = {
-                'type' : 'doubles',
-                'scores' : [
+                'type': 'doubles',
+                'scores': [
                     {
-                        'player' : 't1p1',
-                        'key' : t1p1Key,
-                        'pointsNew' : t1p1PointsNew,
-                        'lastMovement' : t1p1LastMovement,
-                        'gamesLost' : t1p1GamesLost,
-                        'gamesWon' : t1p1GamesWon,
-                        'newGameKey' : newGameKey,
-                        't1p1Key' : t1p1Key,
-                        't1p2Key' : t1p2Key,
-                        't2p1Key' : t2p1Key,
-                        't2p2Key' : t2p2Key,
-                        't1s' : t1s,
-                        't2s' : t2s,
-                        'won' : t1Won
+                        'player': 't1p1',
+                        'key': t1p1Key,
+                        'pointsNew': t1p1PointsNew,
+                        'lastMovement': t1p1LastMovement,
+                        'gamesLost': t1p1GamesLost,
+                        'gamesWon': t1p1GamesWon,
+                        'newGameKey': newGameKey,
+                        't1p1Key': t1p1Key,
+                        't1p2Key': t1p2Key,
+                        't2p1Key': t2p1Key,
+                        't2p2Key': t2p2Key,
+                        't1s': t1s,
+                        't2s': t2s,
+                        'won': t1Won
                     },
                     {
-                        'player' : 't1p2',
-                        'key' : t1p2Key,
-                        'pointsNew' : t1p2PointsNew,
-                        'lastMovement' : t1p2LastMovement,
-                        'gamesLost' : t1p2GamesLost,
-                        'gamesWon' : t1p2GamesWon,
-                        'newGameKey' : newGameKey,
-                        't1p1Key' : t1p1Key,
-                        't1p2Key' : t1p2Key,
-                        't2p1Key' : t2p1Key,
-                        't2p2Key' : t2p2Key,
-                        't1s' : t1s,
-                        't2s' : t2s,
-                        'won' : t1Won
+                        'player': 't1p2',
+                        'key': t1p2Key,
+                        'pointsNew': t1p2PointsNew,
+                        'lastMovement': t1p2LastMovement,
+                        'gamesLost': t1p2GamesLost,
+                        'gamesWon': t1p2GamesWon,
+                        'newGameKey': newGameKey,
+                        't1p1Key': t1p1Key,
+                        't1p2Key': t1p2Key,
+                        't2p1Key': t2p1Key,
+                        't2p2Key': t2p2Key,
+                        't1s': t1s,
+                        't2s': t2s,
+                        'won': t1Won
                     },
                     {
-                        'player' : 't2p1',
-                        'key' : t2p1Key,
-                        'pointsNew' : t2p1PointsNew,
-                        'lastMovement' : t2p1LastMovement,
-                        'gamesLost' : t2p1GamesLost,
-                        'gamesWon' : t2p1GamesWon,
-                        'newGameKey' : newGameKey,
-                        't1p1Key' : t1p1Key,
-                        't1p2Key' : t1p2Key,
-                        't2p1Key' : t2p1Key,
-                        't2p2Key' : t2p2Key,
-                        't1s' : t1s,
-                        't2s' : t2s,
-                        'won' : t2Won
+                        'player': 't2p1',
+                        'key': t2p1Key,
+                        'pointsNew': t2p1PointsNew,
+                        'lastMovement': t2p1LastMovement,
+                        'gamesLost': t2p1GamesLost,
+                        'gamesWon': t2p1GamesWon,
+                        'newGameKey': newGameKey,
+                        't1p1Key': t1p1Key,
+                        't1p2Key': t1p2Key,
+                        't2p1Key': t2p1Key,
+                        't2p2Key': t2p2Key,
+                        't1s': t1s,
+                        't2s': t2s,
+                        'won': t2Won
                     },
                     {
-                        'player' : 't2p2',
-                        'key' : t2p2Key,
-                        'pointsNew' : t2p2PointsNew,
-                        'lastMovement' : t2p2LastMovement,
-                        'gamesLost' : t2p2GamesLost,
-                        'gamesWon' : t2p2GamesWon,
-                        'newGameKey' : newGameKey,
-                        't1p1Key' : t1p1Key,
-                        't1p2Key' : t1p2Key,
-                        't2p1Key' : t2p1Key,
-                        't2p2Key' : t2p2Key,
-                        't1s' : t1s,
-                        't2s' : t2s,
-                        'won' : t2Won
+                        'player': 't2p2',
+                        'key': t2p2Key,
+                        'pointsNew': t2p2PointsNew,
+                        'lastMovement': t2p2LastMovement,
+                        'gamesLost': t2p2GamesLost,
+                        'gamesWon': t2p2GamesWon,
+                        'newGameKey': newGameKey,
+                        't1p1Key': t1p1Key,
+                        't1p2Key': t1p2Key,
+                        't2p1Key': t2p1Key,
+                        't2p2Key': t2p2Key,
+                        't1s': t1s,
+                        't2s': t2s,
+                        'won': t2Won
                     }
                 ]
             }
@@ -888,39 +893,39 @@
             }
             // Cache last game
             lastGame.players = {
-                'type' : 'singles',
-                'scores' : [
+                'type': 'singles',
+                'scores': [
                     {
-                        'player' : 't1p1',
-                        'key' : t1p1Key,
-                        'pointsNew' : t1p1PointsNew,
-                        'lastMovement' : t1p1LastMovement,
-                        'gamesLost' : t1p1GamesLost,
-                        'gamesWon' : t1p1GamesWon,
-                        'newGameKey' : newGameKey,
-                        't1p1Key' : t1p1Key,
-                        't1p2Key' : '',
-                        't2p1Key' : t2p1Key,
-                        't2p2Key' : '',
-                        't1s' : t1s,
-                        't2s' : t2s,
-                        'won' : t1Won
+                        'player': 't1p1',
+                        'key': t1p1Key,
+                        'pointsNew': t1p1PointsNew,
+                        'lastMovement': t1p1LastMovement,
+                        'gamesLost': t1p1GamesLost,
+                        'gamesWon': t1p1GamesWon,
+                        'newGameKey': newGameKey,
+                        't1p1Key': t1p1Key,
+                        't1p2Key': '',
+                        't2p1Key': t2p1Key,
+                        't2p2Key': '',
+                        't1s': t1s,
+                        't2s': t2s,
+                        'won': t1Won
                     },
                     {
-                        'player' : 't2p1',
-                        'key' : t2p1Key,
-                        'pointsNew' : t2p1PointsNew,
-                        'lastMovement' : t2p1LastMovement,
-                        'gamesLost' : t2p1GamesLost,
-                        'gamesWon' : t2p1GamesWon,
-                        'newGameKey' : newGameKey,
-                        't1p1Key' : t1p1Key,
-                        't1p2Key' : '',
-                        't2p1Key' : t2p1Key,
-                        't2p2Key' : '',
-                        't1s' : t1s,
-                        't2s' : t2s,
-                        'won' : t2Won
+                        'player': 't2p1',
+                        'key': t2p1Key,
+                        'pointsNew': t2p1PointsNew,
+                        'lastMovement': t2p1LastMovement,
+                        'gamesLost': t2p1GamesLost,
+                        'gamesWon': t2p1GamesWon,
+                        'newGameKey': newGameKey,
+                        't1p1Key': t1p1Key,
+                        't1p2Key': '',
+                        't2p1Key': t2p1Key,
+                        't2p2Key': '',
+                        't1s': t1s,
+                        't2s': t2s,
+                        'won': t2Won
                     }
                 ]
             }
@@ -938,25 +943,25 @@
         initUndo();
     }
     function scoringEvents() {
-        $('.score-add').off('submit').on('submit', function() {
+        $('.score-add').off('submit').on('submit', function () {
             if (scoringValidation()) {
                 scoringAdd();
             }
             return false;
         });
         // De-activate selected user on other team to avoid selecting the same player on both teams
-        $('.t1-players a').on('click', function() {
+        $('.t1-players a').on('click', function () {
             var thisKey = $(this).data('id');
             var isChecked = $(this).hasClass('selected');
             $('.t2-players a[data-id="' + thisKey + '"]').toggleClass('is-disabled', isChecked);
         });
-        $('.t2-players a').on('click', function() {
+        $('.t2-players a').on('click', function () {
             var thisKey = $(this).data('id');
             var isChecked = $(this).hasClass('selected');
             $('.t1-players a[data-id="' + thisKey + '"]').toggleClass('is-disabled', isChecked);
         });
         // Decrements, Increment
-        $('.decrement a, .increment a').off('click').on('click', function() {
+        $('.decrement a, .increment a').off('click').on('click', function () {
             var $this = $(this);
             var amount = $this.data('amount');
             var team = $this.data('team');
@@ -986,7 +991,7 @@
         }
         $('.t1-players, .t2-players').html(playerScoresUi);
         clearTimeout(scoringEventsTimer);
-        scoringEventsTimer = setTimeout(function() {
+        scoringEventsTimer = setTimeout(function () {
             scoringEvents();
         }, 300);
     }
@@ -995,7 +1000,7 @@
         for (var i = 0; i < playersArray.length; i++) {
             var key = playersArray[i].key;
             if (playersArray[i][type]) {
-                fbdb.ref('/players/' + key).update(obj).catch(function(error) {
+                fbdb.ref('/players/' + key).update(obj).catch(function (error) {
                     console.log('Failed to reset last movement');
                 });
             }
@@ -1004,20 +1009,20 @@
     function scoringSave(player, type, key, points, movement, lost, won, gameKey, t1p1Key, t1p2Key, t2p1Key, t2p2Key, t1s, t2s, wonGame) {
         // Save "players" data
         var playersData = {}
-            playersData[type + '_points'] = points;
-            playersData[type + '_last_movement'] = movement;
-            playersData[type + '_lost'] = lost;
-            playersData[type + '_won'] = won;
+        playersData[type + '_points'] = points;
+        playersData[type + '_last_movement'] = movement;
+        playersData[type + '_lost'] = lost;
+        playersData[type + '_won'] = won;
         if (logging) {
             console.log('Save "players" data');
             console.log(playersData);
             console.log('----');
         }
-        fbdb.ref('/players/' + key).update(playersData).catch(function(error) {
+        fbdb.ref('/players/' + key).update(playersData).catch(function (error) {
             console.log('Failed to update players data');
         });
         // Save "players_game" data
-        var playersGameData = { 
+        var playersGameData = {
             "dt": Date.now(),
             "game": gameKey,
             "player": key,
@@ -1044,22 +1049,22 @@
             console.log('----');
         }
         var dbPlayersGame = fbdb.ref('/playersgame/' + key + '/' + newPlayersGameKey);
-        dbPlayersGame.set(playersGameData).catch(function(error) {
+        dbPlayersGame.set(playersGameData).catch(function (error) {
             console.log('Failed to add new players game');
         });
     }
     function scoringUndo(player, type, key, points, movement, lost, won) {
         // Update player stats
         var playersData = {}
-            playersData[type + '_points'] = points;
-            playersData[type + '_last_movement'] = movement;
-            playersData[type + '_lost'] = lost;
-            playersData[type + '_won'] = won;
-        fbdb.ref('/players/' + key).update(playersData).catch(function(error) {
+        playersData[type + '_points'] = points;
+        playersData[type + '_last_movement'] = movement;
+        playersData[type + '_lost'] = lost;
+        playersData[type + '_won'] = won;
+        fbdb.ref('/players/' + key).update(playersData).catch(function (error) {
             console.log('Failed to update players data');
         });
         // Remove Players Games
-        fbdb.ref('/playersgame/' + key + '/' + lastGame.game[player]).remove().catch(function(error) {
+        fbdb.ref('/playersgame/' + key + '/' + lastGame.game[player]).remove().catch(function (error) {
             console.log('Failed to undo players game');
         });
     }
@@ -1094,8 +1099,8 @@
         }
 
         // Same player(s) are not selected on both teams
-        $('.t1 a.selected').each(function( index ) {
-                if ($('.t2 a[data-id="' + $(this).data('id') + '"]').hasClass('selected')) {
+        $('.t1 a.selected').each(function (index) {
+            if ($('.t2 a[data-id="' + $(this).data('id') + '"]').hasClass('selected')) {
                 messageShow('error', i18n.app.messages.bothTeams, true);
                 return false;
             }
@@ -1144,59 +1149,59 @@
     }
     function sidebarInit() {
         $('.sidebar header').html(tmpl('sidebarHeader', {
-            "settings" : i18n.app.sidebarHeader.settings
+            "settings": i18n.app.sidebarHeader.settings
         }));
         $('.sidebar .sidebar-menu').html(tmpl('sidebarMenu', {
-            "basics" : i18n.app.sidebarMenu.basics,
-            "colors" : i18n.app.sidebarMenu.colors,
-            "players" : i18n.app.sidebarMenu.players,
-            "users" : i18n.app.sidebarMenu.users
+            "basics": i18n.app.sidebarMenu.basics,
+            "colors": i18n.app.sidebarMenu.colors,
+            "players": i18n.app.sidebarMenu.players,
+            "users": i18n.app.sidebarMenu.users
         }));
         sidebarInitEvents();
         // resize event
-        $( window ).resize(function() {
+        $(window).resize(function () {
             sidebarResetHeight();
         });
     }
     function sidebarInitEvents() {
-        $('.sidebar-basics').off('click').on('click', function() {
+        $('.sidebar-basics').off('click').on('click', function () {
             sidebarInitBasic();
             sidebarResetHeight();
             return false;
         });
-        $('.sidebar-colors').off('click').on('click', function() {
+        $('.sidebar-colors').off('click').on('click', function () {
             sidebarInitColor();
             sidebarResetHeight();
             return false;
         });
-        $('.sidebar-players').off('click').on('click', function() {
+        $('.sidebar-players').off('click').on('click', function () {
             sidebarInitPlayer();
             sidebarResetHeight();
             return false;
         });
-        $('.sidebar-users').off('click').on('click', function() {
+        $('.sidebar-users').off('click').on('click', function () {
             sidebarInitUser();
             sidebarResetHeight();
             return false;
         });
         // Sidebar close
-        $('.sidebar .sidebar-close').off('click').on('click', function() {
+        $('.sidebar .sidebar-close').off('click').on('click', function () {
             $('body').removeClass('show-sidebar');
             return false;
         });
     }
     function sidebarInitBasic() {
         $('.sidebar-body').html(tmpl('settingsBasics', {
-            "companyOrClub" : i18n.app.settingsBasics.companyOrClub,
-            "gameAirHockey" : i18n.app.settingsBasics.gameAirHockey,
-            "gameBilliards" : i18n.app.settingsBasics.gameBilliards,
-            "gameFoosball" : i18n.app.settingsBasics.gameFoosball,
-            "gameShuffleboard" : i18n.app.settingsBasics.gameShuffleboard,
-            "gameTableTennis" : i18n.app.settingsBasics.gameTableTennis,
-            "language" : i18n.app.settingsBasics.language,
-            "nextButton" : i18n.app.global.nextButton,
-            "orgName" : i18n.app.settingsBasics.orgName,
-            "whatGame" : i18n.app.settingsBasics.whatGame
+            "companyOrClub": i18n.app.settingsBasics.companyOrClub,
+            "gameAirHockey": i18n.app.settingsBasics.gameAirHockey,
+            "gameBilliards": i18n.app.settingsBasics.gameBilliards,
+            "gameFoosball": i18n.app.settingsBasics.gameFoosball,
+            "gameShuffleboard": i18n.app.settingsBasics.gameShuffleboard,
+            "gameTableTennis": i18n.app.settingsBasics.gameTableTennis,
+            "language": i18n.app.settingsBasics.language,
+            "nextButton": i18n.app.global.nextButton,
+            "orgName": i18n.app.settingsBasics.orgName,
+            "whatGame": i18n.app.settingsBasics.whatGame
         }));
         sidebarInitBasicEvents();
         sidebarBasicSettingsUpdate();
@@ -1206,57 +1211,57 @@
     }
     function sidebarInitBasicEvents() {
         // Update company name
-        $('#orgName').off('blur').on('blur', function() {
+        $('#orgName').off('blur').on('blur', function () {
             var name = $(this).val();
             if (name !== localData.settings.orgName && name !== '') {
                 fbdb.ref('/settings/').update({
                     'orgName': $(this).val()
-                }, function() {
+                }, function () {
                     messageShow('success', i18n.app.messages.nameUpdated, true);
-                }).catch(function(error) {
+                }).catch(function (error) {
                     console.log('Failed to update name');
                 });
             }
             return false;
         });
         // Update game type
-        $('input[name="gameType"]').off('change').on('change', function() {
+        $('input[name="gameType"]').off('change').on('change', function () {
             fbdb.ref('/settings/').update({
                 'gameType': $(this).val()
-            }, function() {
+            }, function () {
                 messageShow('success', i18n.app.messages.gameTypeUpdated, true);
-            }).catch(function(error) {
+            }).catch(function (error) {
                 console.log('Failed to update game type');
             });
             return false;
         });
         // Select language
-        $('.lang').on('change', function() {
+        $('.lang').on('change', function () {
             localStorage.setItem('lang', $(this).val());
             location.reload();
         });
         // Next button
-        $('.basics .next').off('click').on('click', function() {
+        $('.basics .next').off('click').on('click', function () {
             sidebarInitColor();
             return false;
         });
     }
     function sidebarInitColor() {
         $('.sidebar-body').html(tmpl('settingsColors', {
-            'c0' : localData.settings.appColors.c0,
-            'c1' : localData.settings.appColors.c1,
-            'c2' : localData.settings.appColors.c2,
-            'c3' : localData.settings.appColors.c3,
-            'c4' : localData.settings.appColors.c4,
-            'c5' : localData.settings.appColors.c5,
-            'highlightColor' : i18n.app.settingsColors.highlightColor,
-            "nextButton" : i18n.app.global.nextButton,
-            'primaryBackground' : i18n.app.settingsColors.primaryBackground,
-            'primaryButton' : i18n.app.settingsColors.primaryButton,
-            'primaryText' : i18n.app.settingsColors.primaryText,
-            'resetColors' : i18n.app.settingsColors.resetColors,
-            'secondaryBackground' : i18n.app.settingsColors.secondaryBackground,
-            'secondaryText' : i18n.app.settingsColors.secondaryText
+            'c0': localData.settings.appColors.c0,
+            'c1': localData.settings.appColors.c1,
+            'c2': localData.settings.appColors.c2,
+            'c3': localData.settings.appColors.c3,
+            'c4': localData.settings.appColors.c4,
+            'c5': localData.settings.appColors.c5,
+            'highlightColor': i18n.app.settingsColors.highlightColor,
+            "nextButton": i18n.app.global.nextButton,
+            'primaryBackground': i18n.app.settingsColors.primaryBackground,
+            'primaryButton': i18n.app.settingsColors.primaryButton,
+            'primaryText': i18n.app.settingsColors.primaryText,
+            'resetColors': i18n.app.settingsColors.resetColors,
+            'secondaryBackground': i18n.app.settingsColors.secondaryBackground,
+            'secondaryText': i18n.app.settingsColors.secondaryText
         }));
         sidebarInitColorEvents();
         // Update menu bar
@@ -1265,15 +1270,15 @@
     }
     function sidebarInitColorEvents() {
         // Iris
-        $('.color-picker').each(function( index ) {
+        $('.color-picker').each(function (index) {
             var $this = $(this);
             $this.iris({
                 palettes: true,
-                change: function(event, ui) {
+                change: function (event, ui) {
                     var newColor = ui.color.toString();
                     var id = event.target.id;
 
-                    if (!['c0','c1','c2','c3','c4','c5'].includes(id)) {
+                    if (!['c0', 'c1', 'c2', 'c3', 'c4', 'c5'].includes(id)) {
                         return false;
                     }
 
@@ -1291,47 +1296,47 @@
                     }
 
                     if (newColor !== localData.settings.appColors[id]) {
-                        fbdb.ref('/settings/appColors/').update(colorUpdate, function() {
+                        fbdb.ref('/settings/appColors/').update(colorUpdate, function () {
                             $('.' + id + ' .swatch').css('background', newColor);
                             messageShow('success', i18n.app.messages.colorUpdated, true);
-                        }).catch(function(error) {
+                        }).catch(function (error) {
                             console.log('Failed to update color');
                         });
                     }
                 }
-            }).off('focus').on('focus', function() {
+            }).off('focus').on('focus', function () {
                 sidebarHideIris();
                 $this.iris('show');
-            }).off('click').on('click', function(e) {
+            }).off('click').on('click', function (e) {
                 e.stopPropagation();
             });
-            $('.iris-picker').off('click').on('click', function(e) {
+            $('.iris-picker').off('click').on('click', function (e) {
                 e.stopPropagation();
             });
-            $('.sidebar').off('click').on('click', function() {
+            $('.sidebar').off('click').on('click', function () {
                 sidebarHideIris();
             });
         });
         // Reset colors
-        $('.reset-colors').off('click').on('click', function() {
+        $('.reset-colors').off('click').on('click', function () {
             if (confirm(i18n.app.settingsColors.resetColors + '?')) {
-                fbdb.ref('/settings/appColors/').remove().then(function() {
+                fbdb.ref('/settings/appColors/').remove().then(function () {
                     sidebarInitColor();
                 });
             }
             return false;
         });
         // Next button
-        $('.colors .next').off('click').on('click', function() {
+        $('.colors .next').off('click').on('click', function () {
             sidebarInitPlayer();
             return false;
         });
     }
     function sidebarInitPlayer() {
         $('.sidebar-body').html(tmpl('settingsPlayers', {
-            "addPlayers" : i18n.app.settingsPlayers.addPlayers,
-            "nextButton" : i18n.app.global.nextButton,
-            "onePerLine" : i18n.app.settingsPlayers.onePerLine
+            "addPlayers": i18n.app.settingsPlayers.addPlayers,
+            "nextButton": i18n.app.global.nextButton,
+            "onePerLine": i18n.app.settingsPlayers.onePerLine
         }));
         // Update player settings
         playerSettingsUpdate();
@@ -1342,9 +1347,9 @@
     }
     function sidebarInitPlayerEvents() {
         // Add Players
-        $('.players-add form').off('click').on('submit', function() {
+        $('.players-add form').off('click').on('submit', function () {
             var playersField = $('.players-add form textarea');
-            $.each( playersField.val().split('\n'), function( index, player ){
+            $.each(playersField.val().split('\n'), function (index, player) {
                 if (!player) {
                     return false;
                 }
@@ -1352,7 +1357,7 @@
                 var newPlayerKey = fbdb.ref().child('players').push().key;
                 // Add new player
                 var dbPlayers = fbdb.ref('/players/' + newPlayerKey);
-                dbPlayers.set({ 
+                dbPlayers.set({
                     "doubles_last_movement": '',
                     "doubles_lost": 0,
                     "doubles_points": 100,
@@ -1363,11 +1368,11 @@
                     "singles_lost": 0,
                     "singles_points": 100,
                     "singles_won": 0,
-                    "status": true 
-                }).then(function() {
+                    "status": true
+                }).then(function () {
                     playerSettingsUpdate();
                     messageShow('success', i18n.app.messages.playerAdded, true);
-                }).catch(function(error) {
+                }).catch(function (error) {
                     console.log('Failed to add player');
                 });
             });
@@ -1378,15 +1383,15 @@
             return false;
         });
         // Next button
-        $('.players-view .next').off('click').on('click', function() {
+        $('.players-view .next').off('click').on('click', function () {
             sidebarInitUser();
             return false;
         });
     }
     function sidebarInitUser() {
         $('.sidebar-body').html(tmpl('settingsUsers', {
-            "manageLogins" : i18n.app.settingsUsers.manageLogins,
-            "nextButton" : i18n.app.global.nextButton
+            "manageLogins": i18n.app.settingsUsers.manageLogins,
+            "nextButton": i18n.app.global.nextButton
         }));
         sidebarInitUserEvents();
         // Update menu bar
@@ -1395,13 +1400,13 @@
     }
     function sidebarInitUserEvents() {
         // Account edit link
-        $('.account-manage').off('click').on('click', function() {
+        $('.account-manage').off('click').on('click', function () {
             var authDomainSplit = config.authDomain.split('.');
             window.location = 'https://console.firebase.google.com/project/' + authDomainSplit[0] + '/authentication/users';
             return false;
         });
         // Next button
-        $('.users .next').off('click').on('click', function() {
+        $('.users .next').off('click').on('click', function () {
             sidebarInitBasic();
             return false;
         });
@@ -1412,12 +1417,12 @@
         var windowHeight = parseInt($(window).height());
         var newSidebarHeight = Math.max(sidebarHeight, windowHeight);
         $('.sidebar').css('height', newSidebarHeight + 'px');
-    }  
+    }
     function sidebarShow() {
         $('body').addClass('show-sidebar');
         sidebarInitBasic();
         sidebarResetHeight();
-    }     
+    }
     function sidebarToggle() {
         var body = $('body');
         if (body.hasClass('show-sidebar')) {
