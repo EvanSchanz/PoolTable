@@ -7,3 +7,4 @@ firebase-key.js
 .sass-cache
 *.map
 *.scss
+firebase-debug.log
