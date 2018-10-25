@@ -1,0 +1,9 @@
+.DS_Store
+node_modules
+package.json
+npm-debug.log
+main.js
+firebase-key.js
+.sass-cache
+*.map
+*.scss
