@@ -486,26 +486,13 @@
             // Player stats
             var doublesPlayed = localData.playersByKey[thisKey].doubles_lost + localData.playersByKey[thisKey].doubles_won;
             var singlesPlayed = localData.playersByKey[thisKey].singles_lost + localData.playersByKey[thisKey].singles_won;
-            $('.stats-player').html(tmpl('statsPlayer', {
-                "doubles": i18n.app.statsPlayer.doubles,
-                "doubles_lost": localData.playersByKey[thisKey].doubles_lost,
-                "doubles_played": doublesPlayed,
-                "doubles_rank": localData.playersByKey[thisKey].doubles_rank,
-                "doubles_won": localData.playersByKey[thisKey].doubles_won,
-                "gamesLost": i18n.app.statsPlayer.gamesLost,
-                "gamesPlayed": i18n.app.statsPlayer.gamesPlayed,
-                "gamesWon": i18n.app.statsPlayer.gamesWon,
-                "ranking": i18n.app.statsPlayer.ranking,
-                "singles": i18n.app.statsPlayer.singles,
-                "singles_lost": localData.playersByKey[thisKey].singles_lost,
-                "singles_played": singlesPlayed,
-                "singles_rank": localData.playersByKey[thisKey].singles_rank,
-                "singles_won": localData.playersByKey[thisKey].singles_won
-            }));
+
             // Player games stats
             var lastTwentyGames = '';
             var lastTwentyGamesData = [];
             var playersGames = {};
+            var singlesNemesis = "No one";
+            var lostGames = [];
             fbdb.ref('/playersgame/' + thisKey).limitToLast(20).once('value').then(function (snapshot) {
                 playersGames = snapshot.val();
                 // To array
@@ -528,6 +515,13 @@
                     var gameStatus = 'Lost';
                     if (lastTwentyGamesData[i].won) {
                         gameStatus = 'Won';
+                    } else {
+                        if (lostGames[lastTwentyGamesData[i].t1p1]) {
+                            lostGames[lastTwentyGamesData[i].t1p1]++;
+                        } else {
+                            lostGames[lastTwentyGamesData[i].t1p1] = 1;
+                        }
+
                     }
                     if (!localData.playersByKey[lastTwentyGamesData[i].t1p1] || !localData.playersByKey[lastTwentyGamesData[i].t2p1]) {
                         continue;
@@ -558,11 +552,33 @@
                         "t2Score": lastTwentyGamesData[i].t2_points
                     });
                 }
+                if (lostGames) {
+                    lostGames.sort();
+                    singlesNemesis = localData.playersByKey[Object.keys(lostGames)[0]].name;
+
+                }
                 if (!lastTwentyGames) {
                     lastTwentyGames = '<li>No games have been entered for this user.</li>';
                 }
                 // Add it to the DOM
                 $('.stats-player-games ul').html(lastTwentyGames);
+                $('.stats-player').html(tmpl('statsPlayer', {
+                    "doubles": i18n.app.statsPlayer.doubles,
+                    "doubles_lost": localData.playersByKey[thisKey].doubles_lost,
+                    "doubles_played": doublesPlayed,
+                    "doubles_rank": localData.playersByKey[thisKey].doubles_rank,
+                    "doubles_won": localData.playersByKey[thisKey].doubles_won,
+                    "gamesLost": i18n.app.statsPlayer.gamesLost,
+                    "gamesPlayed": i18n.app.statsPlayer.gamesPlayed,
+                    "gamesWon": i18n.app.statsPlayer.gamesWon,
+                    "ranking": i18n.app.statsPlayer.ranking,
+                    "singles": i18n.app.statsPlayer.singles,
+                    "singles_lost": localData.playersByKey[thisKey].singles_lost,
+                    "singles_played": singlesPlayed,
+                    "singles_rank": localData.playersByKey[thisKey].singles_rank,
+                    "singles_won": localData.playersByKey[thisKey].singles_won,
+                    "nemesis": singlesNemesis
+                }));
             }).catch(function (error) {
                 console.log('Unable to pull player game history');
                 console.log(error)
