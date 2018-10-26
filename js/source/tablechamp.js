@@ -491,7 +491,7 @@
             var lastTwentyGames = '';
             var lastTwentyGamesData = [];
             var playersGames = {};
-            var singlesNemesis = "No one";
+            var singlesNemesis = "";
             var lostGames = [];
             fbdb.ref('/playersgame/' + thisKey).limitToLast(20).once('value').then(function (snapshot) {
                 playersGames = snapshot.val();
@@ -552,7 +552,7 @@
                         "t2Score": lastTwentyGamesData[i].t2_points
                     });
                 }
-                if (lostGames) {
+                if (lostGames.length > 0) {
                     lostGames.sort();
                     singlesNemesis = localData.playersByKey[Object.keys(lostGames)[0]].name;
 
