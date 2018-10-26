@@ -520,6 +520,7 @@
                             lostGames[lastTwentyGamesData[i].t1p1]++;
                         } else {
                             lostGames[lastTwentyGamesData[i].t1p1] = 1;
+                            lostGames.length++;
                         }
 
                     }
