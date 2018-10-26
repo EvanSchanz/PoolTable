@@ -348,8 +348,8 @@ The loser must re-rack the table for next game
 		</tr>
 		<tr>
 			<th>Win percentage</th>
-			<td><%=isNaN(singles_won/(singles_played) *100) ? 0 : singles_won/(singles_won + singles_lost) *100 %>%</td>
-			<td><%=isNaN(doubles_won/(doubles_played) *100) ? 0 : doubles_won/(doubles_won + doubles_lost) *100 %>%</td>
+			<td><%=isNaN(singles_won/(singles_played) *100) ? 0 : (singles_won/(singles_won + singles_lost) *100).toFixed(0) %>%</td>
+			<td><%=isNaN(doubles_won/(doubles_played) *100) ? 0 : (doubles_won/(doubles_won + doubles_lost) *100).toFixed(0) %>%</td>
 		</tr>
 		<tr>
 			<th><%=ranking%></th>

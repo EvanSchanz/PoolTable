@@ -1360,13 +1360,13 @@
                 dbPlayers.set({
                     "doubles_last_movement": '',
                     "doubles_lost": 0,
-                    "doubles_points": 100,
+                    "doubles_points": 1000,
                     "doubles_won": 0,
                     "dt": Date.now(),
                     "name": player,
                     "singles_last_movement": '',
                     "singles_lost": 0,
-                    "singles_points": 100,
+                    "singles_points": 1000,
                     "singles_won": 0,
                     "status": true
                 }).then(function () {

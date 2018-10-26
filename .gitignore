@@ -8,3 +8,4 @@ firebase-key.js
 *.map
 *.scss
 firebase-debug.log
+.firebase/hosting..cache
