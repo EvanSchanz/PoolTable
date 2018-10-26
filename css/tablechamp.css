@@ -1087,10 +1087,11 @@ body.ru .sidebar .sidebar-menu a {
     margin-right: 6px;
     padding: 2px 6px; }
     .stats-player-games strong.Lost {
-      border: 1px solid #8F9EAB;
-      color: #67727B; }
+      /* border: 1px solid #ed2828; */
+      background: #b31212;
+      color: #FFF; }
     .stats-player-games strong.Won {
-      background: #67727B;
+      background: #1d8715;
       color: #FFF; }
   .stats-player-games ul {
     margin: 0;
