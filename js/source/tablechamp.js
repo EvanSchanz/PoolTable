@@ -493,6 +493,7 @@
             var playersGames = {};
             var singlesNemesis = "";
             var lostGames = [];
+            var wonGames = [];
             fbdb.ref('/playersgame/' + thisKey).limitToLast(200).once('value').then(function (snapshot) {
                 playersGames = snapshot.val();
                 // To array
@@ -515,6 +516,12 @@
                     var gameStatus = 'Lost';
                     if (lastTwentyGamesData[i].won) {
                         gameStatus = 'Won';
+                        if (wonGames[lastTwentyGamesData[i].t2p1]) {
+                            wonGames[lastTwentyGamesData[i].t2p1]++;
+                        } else {
+                            wonGames[lastTwentyGamesData[i].t2p1] = 1;
+                            wonGames.length++;
+                        }
                     } else {
                         if (lostGames[lastTwentyGamesData[i].t1p1]) {
                             lostGames[lastTwentyGamesData[i].t1p1]++;
@@ -556,7 +563,7 @@
                 }
                 if (lostGames.length > 0) {
                     var maxLossPlayer = Object.keys(lostGames).reduce(function (a, b) { return lostGames[a] > lostGames[b] ? a : b });
-                    singlesNemesis = localData.playersByKey[maxLossPlayer].name + "(" + lostGames[maxLossPlayer] + ")";
+                    singlesNemesis = localData.playersByKey[maxLossPlayer].name + " ( " + lostGames[maxLossPlayer] + " v " + (wonGames[maxLossPlayer] ? wonGames[maxLossPlayer] : "0") + " )";
 
                 }
                 if (!lastTwentyGames) {
