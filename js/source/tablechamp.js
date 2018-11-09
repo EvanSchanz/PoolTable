@@ -493,7 +493,7 @@
             var playersGames = {};
             var singlesNemesis = "";
             var lostGames = [];
-            fbdb.ref('/playersgame/' + thisKey).limitToLast(20).once('value').then(function (snapshot) {
+            fbdb.ref('/playersgame/' + thisKey).limitToLast(200).once('value').then(function (snapshot) {
                 playersGames = snapshot.val();
                 // To array
                 for (var key in playersGames) {
@@ -550,7 +550,8 @@
                         "t1": t1,
                         "t1Score": lastTwentyGamesData[i].t1_points,
                         "t2": t2,
-                        "t2Score": lastTwentyGamesData[i].t2_points
+                        "t2Score": lastTwentyGamesData[i].t2_points,
+                        "date": new Date(lastTwentyGamesData[i].dt)
                     });
                 }
                 if (lostGames.length > 0) {
