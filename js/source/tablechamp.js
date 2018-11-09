@@ -555,8 +555,8 @@
                     });
                 }
                 if (lostGames.length > 0) {
-                    lostGames.sort();
-                    singlesNemesis = localData.playersByKey[Object.keys(lostGames)[0]].name;
+                    var maxLossPlayer = Object.keys(lostGames).reduce(function (a, b) { return lostGames[a] > lostGames[b] ? a : b });
+                    singlesNemesis = localData.playersByKey[maxLossPlayer].name;
 
                 }
                 if (!lastTwentyGames) {
