@@ -556,7 +556,7 @@
                 }
                 if (lostGames.length > 0) {
                     var maxLossPlayer = Object.keys(lostGames).reduce(function (a, b) { return lostGames[a] > lostGames[b] ? a : b });
-                    singlesNemesis = localData.playersByKey[maxLossPlayer].name;
+                    singlesNemesis = localData.playersByKey[maxLossPlayer].name + "(" + lostGames[maxLossPlayer] + ")";
 
                 }
                 if (!lastTwentyGames) {
