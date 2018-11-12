@@ -492,6 +492,7 @@
             var lastTwentyGamesData = [];
             var playersGames = {};
             var singlesNemesis = "";
+            var singlesBogie = "";
             var lostGames = [];
             var wonGames = [];
             fbdb.ref('/playersgame/' + thisKey).limitToLast(200).once('value').then(function (snapshot) {
@@ -563,8 +564,12 @@
                 }
                 if (lostGames.length > 0) {
                     var maxLossPlayer = Object.keys(lostGames).reduce(function (a, b) { return lostGames[a] > lostGames[b] ? a : b });
-                    singlesNemesis = localData.playersByKey[maxLossPlayer].name + " ( " + lostGames[maxLossPlayer] + " v " + (wonGames[maxLossPlayer] ? wonGames[maxLossPlayer] : "0") + " )";
+                    singlesNemesis = localData.playersByKey[maxLossPlayer].name + " ( " + (wonGames[maxLossPlayer] ? wonGames[maxLossPlayer] : "0") + " v " + lostGames[maxLossPlayer] + " ) ";
 
+                }
+                if (wonGames.length > 0) {
+                    var maxWinOpponent = Object.keys(wonGames).reduce(function (a, b) { return wonGames[a] > wonGames[b] ? a : b });
+                    singlesBogie = localData.playersByKey[maxWinOpponent].name + " ( " + (wonGames[maxWinOpponent] ? wonGames[maxWinOpponent] : "0") + " v " + lostGames[maxWinOpponent] + " ) ";
                 }
                 if (!lastTwentyGames) {
                     lastTwentyGames = '<li>No games have been entered for this user.</li>';
@@ -586,7 +591,8 @@
                     "singles_played": singlesPlayed,
                     "singles_rank": localData.playersByKey[thisKey].singles_rank,
                     "singles_won": localData.playersByKey[thisKey].singles_won,
-                    "nemesis": singlesNemesis
+                    "nemesis": singlesNemesis,
+                    "bogie": singlesBogie
                 }));
             }).catch(function (error) {
                 console.log('Unable to pull player game history');
