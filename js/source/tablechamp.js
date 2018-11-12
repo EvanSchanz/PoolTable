@@ -569,7 +569,7 @@
                 }
                 if (wonGames.length > 0) {
                     var maxWinOpponent = Object.keys(wonGames).reduce(function (a, b) { return wonGames[a] > wonGames[b] ? a : b });
-                    singlesBogey = localData.playersByKey[maxWinOpponent].name + " ( " + (wonGames[maxWinOpponent] ? wonGames[maxWinOpponent] : "0") + " v " + lostGames[maxWinOpponent] + " ) ";
+                    singlesBogey = localData.playersByKey[maxWinOpponent].name + " ( " + (wonGames[maxWinOpponent] ? wonGames[maxWinOpponent] : "0") + " v " + (lostGames[maxWinOpponent] ? lostGames[maxWinOpponent] : 0) + " ) ";
                 }
                 if (!lastTwentyGames) {
                     lastTwentyGames = '<li>No games have been entered for this user.</li>';
