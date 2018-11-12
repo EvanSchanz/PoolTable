@@ -492,7 +492,7 @@
             var lastTwentyGamesData = [];
             var playersGames = {};
             var singlesNemesis = "";
-            var singlesBogie = "";
+            var singlesBogey = "";
             var lostGames = [];
             var wonGames = [];
             fbdb.ref('/playersgame/' + thisKey).limitToLast(200).once('value').then(function (snapshot) {
@@ -569,7 +569,7 @@
                 }
                 if (wonGames.length > 0) {
                     var maxWinOpponent = Object.keys(wonGames).reduce(function (a, b) { return wonGames[a] > wonGames[b] ? a : b });
-                    singlesBogie = localData.playersByKey[maxWinOpponent].name + " ( " + (wonGames[maxWinOpponent] ? wonGames[maxWinOpponent] : "0") + " v " + lostGames[maxWinOpponent] + " ) ";
+                    singlesBogey = localData.playersByKey[maxWinOpponent].name + " ( " + (wonGames[maxWinOpponent] ? wonGames[maxWinOpponent] : "0") + " v " + lostGames[maxWinOpponent] + " ) ";
                 }
                 if (!lastTwentyGames) {
                     lastTwentyGames = '<li>No games have been entered for this user.</li>';
@@ -592,7 +592,7 @@
                     "singles_rank": localData.playersByKey[thisKey].singles_rank,
                     "singles_won": localData.playersByKey[thisKey].singles_won,
                     "nemesis": singlesNemesis,
-                    "bogie": singlesBogie
+                    "bogie": singlesBogey
                 }));
             }).catch(function (error) {
                 console.log('Unable to pull player game history');
