@@ -1,7 +1,7 @@
 var i18n = {
 	"app": {
 		"appHeader": {
-			"addScore": "Add Score",
+			"addScore": "Add Game",
 			"doubles": "Doubles",
 			"logOut": "Log Out",
 			"settings": "Settings",
@@ -37,8 +37,8 @@ var i18n = {
 			"deleteLink": "Delete"
 		},
 		"scoreAdd": {
-			"addScoreButton": "Add new score",
-			"addScoreTitle": "Add Score",
+			"addScoreButton": "Add new game",
+			"addScoreTitle": "Add Game",
 			"teamOnePlayers": "Winner",
 			"teamOneScore": "Team one score",
 			"teamTwoPlayers": "Loser",

@@ -658,8 +658,8 @@
     // ---------------------------------------------------
     function scoringAdd() {
         // Scores
-        var t1s = $('.t1-score').val();
-        var t2s = $('.t2-score').val();
+        var t1s = 1;
+        var t2s = 0;
         if (logging) {
             console.log('scores');
             console.log(t1s);
@@ -1104,10 +1104,10 @@
         var t2Count = $('.t2 a.selected').length;
 
         // Valid integer for both scores
-        if ($('.t1-score').val() === '' || $('.t2-score').val() === '') {
-            messageShow('error', i18n.app.messages.scoreBoth, true);
-            return false;
-        }
+        // if ($('.t1-score').val() === '' || $('.t2-score').val() === '') {
+        //     messageShow('error', i18n.app.messages.scoreBoth, true);
+        //     return false;
+        // }
 
         // At least 1 name is checked per team
         if (!$('.t1-players a').hasClass('selected')) {
@@ -1144,10 +1144,10 @@
         }
 
         // No ties
-        if ($('.t1-score').val() === $('.t2-score').val()) {
-            messageShow('error', i18n.app.messages.keepPlaying + '! ' + i18n.app.messages.noTies + '.', true);
-            return false;
-        }
+        // if ($('.t1-score').val() === $('.t2-score').val()) {
+        //     messageShow('error', i18n.app.messages.keepPlaying + '! ' + i18n.app.messages.noTies + '.', true);
+        //     return false;
+        // }
 
         return true;
     }
