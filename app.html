@@ -21,10 +21,6 @@
 	</div>
 	<div class="app">
 		<header></header>
-		<div class="doubles" style="display: none;">
-			<div class="top-rankings"></div>
-			<div class="rankings"></div>
-		</div>
 		<div class="singles">
 			<div class="top-rankings"></div>
 			<div class="rankings"></div>
@@ -49,8 +45,6 @@
 			<span class="game-type"></span>
 		</div>
 		<div class="header-block">
-			<a href="#" class="singles-toggle ranking-toggle c-button c-button--md is-selected" tabindex="-1" data-view="singles"><%=singles%></a>
-			<a href="#" class="doubles-toggle ranking-toggle c-button c-button--md" data-view="doubles"><%=doubles%></a>
 			<a href="#" class="c-button c-button--link settings"><%=settings%></a>
 			<a href="#" class="c-button c-button--link logout"><%=logOut%></a>
 			<a href="#" class="c-button c-button--md c-button--primary right house-rule">House Rules</a>
@@ -301,32 +295,26 @@ The loser must re-rack the table for next game
 		<tr class="table-header">
 			<th></th>
 			<th><%=singles%></th>
-			<th><%=doubles%></th>
 		</tr>
 		<tr>
 			<th><%=gamesPlayed%></th>
 			<td><%=singles_played%></td>
-			<td><%=doubles_played%></td>
 		</tr>
 		<tr>
 			<th><%=gamesWon%></th>
 			<td><%=singles_won%></td>
-			<td><%=doubles_won%></td>
 		</tr>
 		<tr>
 			<th><%=gamesLost%></th>
 			<td><%=singles_lost%></td>
-			<td><%=doubles_lost%></td>
 		</tr>
 		<tr>
 			<th>Win percentage</th>
 			<td><%=isNaN(singles_won/(singles_played) *100) ? 0 : (singles_won/(singles_won + singles_lost) *100).toFixed(0) %>%</td>
-			<td><%=isNaN(doubles_won/(doubles_played) *100) ? 0 : (doubles_won/(doubles_won + doubles_lost) *100).toFixed(0) %>%</td>
 		</tr>
 		<tr>
 			<th><%=ranking%></th>
 			<td><%=singles_rank%></td>
-			<td><%=doubles_rank%></td>
 		</tr>
 		<tr>
 			<th>Nemesis</th>
