@@ -1190,4 +1190,14 @@ body.ru .sidebar .sidebar-menu a {
   .t1 section {
     margin-bottom: 13px; } }
 
+  .pigpen {
+    border: 15px solid transparent;
+    padding: 15px;
+    border-image: url(../border.png) 30 stretch;
+    background-image: url(../pig.png);
+    background-size: 10%;
+    background-image: linear-gradient(to bottom, rgba(0,0,0,.85) 0%,rgba(0,0,0,.95) 100%), url(../pig.png);
+    background-repeat: repeat;
+    height: 550px;
+  }
 /*# sourceMappingURL=tablechamp.css.map */
